@@ -1,0 +1,132 @@
+import streamlit as st
+from abc import ABC, abstractmethod
+
+# --- CONFIGURAÇÃO DA PÁGINA ---
+st.set_page_config(page_title='Mastering POO & Streamlit', layout='wide')
+st.title(' Laboratório Avançado: POO com Interface Interativa')
+
+# Abas para organizar os exercícios
+tab1, tab2, tab3, tab4, tab5 = st.tabs([
+    ' Herança', 'bstração', 'sobrecarga', ' Dinâmica (type)', ' Liskov'
+])
+
+# --- HERANÇA E SOBRESCRITA ---
+with tab1:
+    st.header("Exercício 1: Classe Livro")
+    
+    class Livro:
+        def __init__(self, titulo, autor, ano):
+            self.titulo = titulo
+            self.autor = autor
+            self.ano = ano
+        def __str__(self):
+            return f"📖 {self.titulo} - {self.autor} ({self.ano})"
+
+    class LivroDigital(Livro):
+        def __init__(self, titulo, autor, ano, formato):
+            super().__init__(titulo, autor, ano)
+            self.formato = formato
+        def __str__(self):
+            return f"📱 [Digital {self.formato}] {self.titulo} - {self.autor}"
+
+    col1, col2 = st.columns(2)
+    with col1:
+        t = st.text_input("Título", "O Código Limpo")
+        a = st.text_input("Autor", "Robert C. Martin")
+        f = st.selectbox("Formato", ["PDF", "EPUB", "MOBI"])
+    
+    livro_comum = Livro(t, a, 2008)
+    livro_digital = LivroDigital(t, a, 2008, f)
+    
+    st.write("**Saída __str__ (Pai):**", str(livro_comum))
+    st.write("**Saída __str__ (Filha):**", str(livro_digital))
+
+# --- TAB 2 ABSTRAÇÃO E POLIMORFISMO ---
+with tab2:
+    st.header("Exercício 2: Veículos (Abstração)")
+
+    class Veiculo(ABC):
+        @abstractmethod
+        def mover(self):
+            pass
+
+    class Carro(Veiculo):
+        def mover(self): return "🚗 O carro acelera no asfalto: Vrum vrum!"
+
+    class Bicicleta(Veiculo):
+        def mover(self): return "🚲 A bicicleta pedala na ciclovia: Trim trim!"
+
+    escolha = st.radio("Escolha um veículo para testar o polimorfismo:", ["Carro", "Bicicleta"])
+    
+    # Teste de Polimorfismo
+    veiculo: Veiculo = Carro() if escolha == "Carro" else Bicicleta()
+    st.success(f"Comportamento polimórfico: {veiculo.mover()}")
+
+# --- TAB 3: SOBRECARGA DE OPERADORES ---
+with tab3:
+    st.header("Exercício 3: Vetores Matemáticos")
+    
+    class Vetor:
+        def __init__(self, x, y):
+            self.x, self.y = x, y
+        def __add__(self, outro): return Vetor(self.x + outro.x, self.y + outro.y)
+        def __sub__(self, outro): return Vetor(self.x - outro.x, self.y - outro.y)
+        def __mul__(self, escalar): return Vetor(self.x * escalar, self.y * escalar)
+        def __repr__(self): return f"Vetor({self.x}, {self.y})"
+
+    c1, c2 = st.columns(2)
+    v1 = Vetor(c1.number_input("V1 X", value=2), c1.number_input("V1 Y", value=3))
+    v2 = Vetor(c2.number_input("V2 X", value=4), c2.number_input("V2 Y", value=1))
+    
+    op = st.selectbox("Operação", ["Soma (+)", "Subtração (-)", "Multiplicação por 2 (*)"])
+    
+    if "Soma" in op: resultado = v1 + v2
+    elif "Subtração" in op: resultado = v1 - v2
+    else: resultado = v1 * 2
+    
+    st.metric("Resultado do Objeto", str(resultado))
+
+# --- TAB 4: CLASSES DINÂMICAS COM TYPE ---
+with tab4:
+    st.header("Exercício 4: Classe Anônima (Dinâmica)")
+    
+    nome_classe = st.text_input("Dê um nome para a classe dinâmica:", "ClasseRobot")
+    
+    def saudacao(self):
+        return f"Olá! Eu sou uma instância da classe {self.__class__.__name__} criada dinamicamente!"
+
+    # Criando a classe em tempo de execução
+    NovaClasse = type(nome_classe, (object,), {"saudacao": saudacao})
+    instancia = NovaClasse()
+    
+    if st.button("Executar método da classe dinâmica"):
+        st.code(instancia.saudacao())
+
+# --- TAB 5: PRINCÍPIO DE LISKOV (SOLID) ---
+with tab5:
+    st.header("Exercício 5: Princípio de Liskov (LSP)")
+    
+    st.info("LSP diz que uma subclasse deve poder substituir a classe pai sem quebrar o código.")
+
+    class Retangulo:
+        def __init__(self, largura, altura):
+            self.largura = largura
+            self.altura = altura
+        def set_largura(self, l): self.largura = l
+        def set_altura(self, a): self.altura = a
+        def area(self): return self.largura * self.altura
+
+    class QuadradoQuebraLiskov(Retangulo):
+        # Quebra o princípio porque mudar a largura altera a altura (comportamento inesperado)
+        def set_largura(self, l):
+            self.largura = self.altura = l
+        def set_altura(self, a):
+            self.largura = self.altura = a
+
+    st.subheader("O Erro: Quadrado herdando de Retângulo")
+    forma = QuadradoQuebraLiskov(5, 5)
+    forma.set_largura(10)
+    forma.set_altura(5) # Em um retângulo normal, a largura continuaria 10.
+    
+    st.warning(f"Área esperada (10x5): 50. Área real no Quadrado: {forma.area()}")
+    st.write("Isso quebra o Liskov porque o Quadrado não se comporta como um Retângulo genérico.")
