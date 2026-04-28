@@ -1,0 +1,302 @@
+
+class Pessoa:
+
+    def __init__(self, nome, idade, email):
+        self.nome = nome
+        self.idade = idade
+        self.email = email
+
+    def __str__(self):
+        return f"Nome: {self.nome}, Idade: {self.idade}, Email: {self.email}"
+
+
+p1 = Pessoa("Ana", 25, "ana@email.com")
+p2 = Pessoa("Carlos", 30, "carlos@email.com")
+
+print(p1)
+print(p2)
+
+
+
+# 2 Classe Livro com Empréstimo
+
+
+class Livro:
+
+    def __init__(self, titulo, autor):
+        self.titulo = titulo
+        self.autor = autor
+        self.disponivel = True
+
+    def emprestar(self):
+        if self.disponivel:
+            self.disponivel = False
+            return True
+        return False
+
+    def devolver(self):
+        self.disponivel = True
+
+    def __str__(self):
+        status = "Disponível" if self.disponivel else "Emprestado"
+        return f"{self.titulo} - {self.autor} ({status})"
+
+
+livro = Livro(" Básico", "João Silva")
+
+print(livro)
+livro.emprestar()
+print(livro)
+livro.devolver()
+print(livro)
+
+
+
+
+# 3 Método de Classe Aluno
+
+
+class Aluno:
+
+    contador = 1
+
+    def __init__(self, nome, matricula, curso):
+        self.nome = nome
+        self.matricula = matricula
+        self.curso = curso
+
+    @classmethod
+    def criar_aluno_padrao(cls):
+        aluno = cls("Novo Aluno", cls.contador, "Indefinido")
+        cls.contador += 1
+        return aluno
+
+
+a1 = Aluno.criar_aluno_padrao()
+a2 = Aluno.criar_aluno_padrao()
+
+print(a1.nome, a1.matricula)
+print(a2.nome, a2.matricula)
+
+
+
+
+# 4 Classe calculadora com Métodos Estáticos
+
+
+class Calculadora:
+
+    @staticmethod
+    def somar(a, b):
+        return a + b
+
+    @staticmethod
+    def subtrair(a, b):
+        return a - b
+
+    @staticmethod
+    def multiplicar(a, b):
+        return a * b
+
+    @staticmethod
+    def dividir(a, b):
+        if b == 0:
+            return "Erro: divisão por zero"
+        return a / b
+
+
+print(Calculadora.somar(5, 3))
+print(Calculadora.dividir(10, 2))
+print(Calculadora.dividir(10, 0))
+
+
+
+
+# 5. Classe carroo com __eq__
+
+
+class Carro:
+
+    def __init__(self, marca, modelo, ano):
+        self.marca = marca
+        self.modelo = modelo
+        self.ano = ano
+
+    def __eq__(self, outro):
+        return (
+            self.marca == outro.marca and
+            self.modelo == outro.modelo and
+            self.ano == outro.ano
+        )
+
+
+c1 = Carro("Toyota", "Corolla", 2020)
+c2 = Carro("Toyota", "Corolla", 2020)
+c3 = Carro("Honda", "Civic", 2022)
+
+print(c1 == c2)
+print(c1 == c3)
+
+
+
+
+# 6 Classe ContaBancaria
+
+
+class ContaBancaria:
+
+    def __init__(self, titular, saldo, tipo):
+        self.titular = titular
+        self.__saldo = saldo
+        self.tipo = tipo
+
+    @classmethod
+    def criar_conta_corrente(cls, titular):
+        return cls(titular, 0, "corrente")
+
+    @classmethod
+    def criar_conta_poupanca(cls, titular):
+        return cls(titular, 50, "poupança")
+
+    def depositar(self, valor):
+        self.__saldo += valor
+
+    def sacar(self, valor):
+        if valor <= self.__saldo:
+            self.__saldo -= valor
+
+    def __str__(self):
+        return f"{self.titular} - {self.tipo} - Saldo: {self.__saldo}"
+
+
+c1 = ContaBancaria.criar_conta_corrente("Ana")
+c2 = ContaBancaria.criar_conta_poupanca("Carlos")
+
+c1.depositar(100)
+c1.sacar(30)
+
+print(c1)
+print(c2)
+
+
+
+
+# 7 Classe Produto com Validação
+
+
+class Produto:
+
+    def __init__(self, nome, preco, quantidade):
+        self.nome = nome
+
+        if Produto.validar_preco(preco):
+            self.preco = preco
+        else:
+            self.preco = 0
+
+        self.quantidade = quantidade
+
+    @staticmethod
+    def validar_preco(preco):
+        return preco > 0
+
+
+p1 = Produto("Mouse", 50, 10)
+p2 = Produto("Teclado", -10, 5)
+
+print(p1.preco)
+print(p2.preco)
+
+
+
+
+# 8 Classe Agenda
+
+
+class Contato:
+
+    def __init__(self, nome, telefone):
+        self.nome = nome
+        self.telefone = telefone
+
+
+class Agenda:
+
+    def __init__(self, contatos=None):
+        if contatos:
+            self.contatos = contatos
+        else:
+            self.contatos = []
+
+    def adicionar_contato(self, contato):
+        self.contatos.append(contato)
+
+    def listar_contatos(self):
+        for c in self.contatos:
+            print(c.nome, c.telefone)
+
+    def buscar_contato(self, nome):
+        for c in self.contatos:
+            if c.nome == nome:
+                return c
+        return None
+
+
+agenda = Agenda()
+
+c1 = Contato("Ana", "9999")
+agenda.adicionar_contato(c1)
+
+agenda.listar_contatos()
+
+print(agenda.buscar_contato("Ana").telefone)
+
+
+
+
+# 9 Classe Func com __len__
+
+class Funcionario:
+
+    def __init__(self, nome, cargo, salario):
+        self.nome = nome
+        self.cargo = cargo
+        self.salario = salario
+
+    def __len__(self):
+        return len(self.nome)
+
+
+f = Funcionario("Carlos", "Dev", 5000)
+
+print(len(f))
+
+
+
+
+# 10 Classe Data com Método de vclasse
+
+
+class Data:
+
+    def __init__(self, dia, mes, ano):
+        self.dia = dia
+        self.mes = mes
+        self.ano = ano
+
+    @classmethod
+    def de_string(cls, data_str):
+        d, m, a = data_str.split("/")
+        return cls(int(d), int(m), int(a))
+
+    def __str__(self):
+        return f"{self.dia:02d}/{self.mes:02d}/{self.ano}"
+
+
+d1 = Data(10, 4, 2026)
+d2 = Data.de_string("25/12/2025")
+
+print(d1)
+print(d2)
+
+
