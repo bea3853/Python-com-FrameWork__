@@ -1,0 +1,21 @@
+import os
+
+def criar_arquitetura_aula():
+
+    pastas = [
+        'projeto_escola/models',      # Camada de Dados (SQLAlchemy/ORM)
+        'projeto_escola/views',       # Camada de Interface (Streamlit)
+        'projeto_escola/controllers', # Lógica de Negócio
+        'projeto_escola/database',    # Configuração do Neon/SQLite
+        'projeto_escola/tests'        # Testes unitários
+    ]
+
+    for pasta in pastas:
+        os.makedirs(pasta, exist_ok=True)
+        # aqv para cada modulo
+        with open(os.path.join(pasta, '__init__.py'), 'w') as f:
+            pass
+            
+    print("Arquitetura de Software criada com sucesso!")
+
+criar_arquitetura_aula()
