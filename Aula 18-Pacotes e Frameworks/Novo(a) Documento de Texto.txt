@@ -1,0 +1,1 @@
+pip install streamlit sqlalchemy psycopg2-binary
