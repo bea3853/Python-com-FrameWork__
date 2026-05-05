@@ -20,16 +20,16 @@ import os
 p = input("Nome do projeto: ")
 
 estrutura = [
-    "app/controllers",
+    'app/controllers',
     "app/services",
-    "app/repositories",
+    'app/repositories',
     "app/models",
     "templates"
 ]
 
 arquivos = [
-    "app/__init__.py",
-    "app/controllers/user_controller.py",
+    'app/__init__.py',
+    'app/controllers/user_controller.py',
     "app/services/user_service.py",
     "app/repositories/user_repository.py",
     "app/models/user_model.py",
