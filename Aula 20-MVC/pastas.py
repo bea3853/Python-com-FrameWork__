@@ -1,5 +1,9 @@
 import os
 
+
+#mvc
+
+
 p = input("Projeto: ")
 
 for d in ["controllers", "services", "repositories", "models"]:
