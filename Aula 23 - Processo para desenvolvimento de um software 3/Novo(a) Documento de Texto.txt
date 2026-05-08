@@ -1,3 +1,5 @@
+criando as pastas pelo windowns
+
 mkdir projeto_livros
 cd projeto_livros
 mkdir app
