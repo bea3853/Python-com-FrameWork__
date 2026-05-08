@@ -8,3 +8,16 @@ type nul > app/models/database.py
 type nul > app/controllers/main.py
 type nul > app/views/app_view.py
 type nul > requirements.txt
+
+
+-------------------------------
+
+streamlit
+
+streamlit run app/views/app_view.py
+
+----------------------------------
+
+api
+
+python -m uvicorn app.controllers.main:app --reload
