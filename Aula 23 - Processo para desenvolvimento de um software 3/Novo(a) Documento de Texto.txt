@@ -1,0 +1,8 @@
+mkdir projeto_livros
+cd projeto_livros
+mkdir app
+mkdir app/models, app/controllers, app/views
+type nul > app/models/database.py
+type nul > app/controllers/main.py
+type nul > app/views/app_view.py
+type nul > requirements.txt
