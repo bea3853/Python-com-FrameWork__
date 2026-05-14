@@ -1,0 +1,2 @@
+New-Item -ItemType Directory -Force app, app\core, app\alunos, app\alunos\templates
+New-Item -ItemType File -Force app\alunos\models.py, app\alunos\views.py, app\alunos\urls.py, .env, manage.py
